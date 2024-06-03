@@ -58,6 +58,10 @@ header {
 	justify-content: space-between;
 	margin: 50px 0
 }
+
+a {
+	text-decoration: inherit;
+}
 section {
 	margin: 50px 0
 }
@@ -131,6 +135,19 @@ li:hover {
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+}
+
+.login {
+	display: flex;
+	flex-direction: column;
+}
+
+.login input {
+    width: 18%;
+}
+
+.pass-oublie {
+	text-decoration: underline;
 }
 
 .gallery img {
