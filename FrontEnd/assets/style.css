@@ -137,13 +137,42 @@ li:hover {
 	grid-row-gap: 20px;
 }
 
+.form-login {
+	text-align: center;
+}
+
 .login {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	margin: 20px 0;
+}
+
+.login label {
+	margin-bottom: 5px;
+    width: 299px;
+    text-align: left;
 }
 
 .login input {
-    width: 18%;
+	width: 276px;
+    padding: 9px;
+}
+
+.button-connexion {
+	margin-top: 7px;
+    margin-bottom: 15px;
+	padding: 7px 36px;
+    border: 1px solid;
+    border-radius: 20px;
+    background: darkgreen;
+    color: white;
+    font-family: inherit;
+}
+
+#email-faux {
+	display:none;
+	color: red;
 }
 
 .pass-oublie {
