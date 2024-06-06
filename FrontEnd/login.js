@@ -1,3 +1,6 @@
+loginUtilisateur()
+
+// Authentification de l’utilisateur
 function loginUtilisateur() {
     const formLogin = document.querySelector(".form-login")
 
@@ -17,7 +20,7 @@ function loginUtilisateur() {
         })
         .then(response=> {
             if(response.ok) {
-                window.location.href ="/FrontEnd/index.html"
+                return response.json()
             } else {
                 if(response.status === 401) {
                 console.error("Non autorisé")
@@ -32,8 +35,16 @@ function loginUtilisateur() {
             }
         }
     })
-    
-})
+        .then(data => {
+            if(data.token) {
+                localStorage.setItem("token", data.token)
+                window.location.href ="/FrontEnd/index.html"
+            }
+        })
+        .catch(error => {
+            console.error("Erreur:", error)
+        })
+    })
 }
 
-loginUtilisateur()
+
