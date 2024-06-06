@@ -52,6 +52,7 @@ body {
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: rgb(244, 244, 235);
 }
 header {
 	display: flex;
@@ -61,6 +62,7 @@ header {
 
 a {
 	text-decoration: inherit;
+	color: inherit;
 }
 section {
 	margin: 50px 0
@@ -129,12 +131,38 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+.lien-clique {
+	font-weight: 700;
+	color: black;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+}
+
+.filtre {
+	display: flex;
+	justify-content: center;
+}
+
+.button-filtre {
+	color: #1D6154;
+    border: 1px solid #1D6154;
+    background: white;
+    border-radius: 20px;
+	padding: 4px 13px;
+    margin: 7px 2px 28px 2px;
+    font-family: inherit;
+}
+
+.button-filtre.active {
+    color: white;
+    background-color: #1D6154;
 }
 
 .form-login {
@@ -165,7 +193,7 @@ li:hover {
 	padding: 7px 36px;
     border: 1px solid;
     border-radius: 20px;
-    background: darkgreen;
+    background: #1D6154;
     color: white;
     font-family: inherit;
 }
@@ -185,7 +213,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
