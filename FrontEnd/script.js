@@ -11,7 +11,6 @@ async function getTravaux() {
     data.forEach( projet => {
         let figure = document.createElement("figure")
         figure.dataset.categorieId = projet.categoryId
-        console.log(projet)
         let img = document.createElement("img")
         let figcaption = document.createElement("figcaption")
 
@@ -33,6 +32,9 @@ async function getCategoriesFiltre() {
     
     let boutonFiltre = document.querySelector(".filtre button")
     boutonFiltre.addEventListener("click", (filterProject))
+    boutonFiltre.classList.add("active")
+    //const tousButton = document.querySelector(".button-filtre")
+    //tousButton.classList.add("active")
 
     categories.forEach( categorie => {
         let btnCategorie = document.createElement("button")
@@ -44,23 +46,26 @@ async function getCategoriesFiltre() {
         let filtre = document.querySelector(".filtre")
         filtre.appendChild(btnCategorie)
     })
-    const tousButton = document.querySelector(".button-filtre")
-    tousButton.classList.add("active")
-    document.querySelectorAll(".button-filtre").forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.button-filtre').forEach(btn => btn.classList.remove('active'))
-            this.classList.add('active')
-        })
-    })
-}
 
+}
 async function filterProject(event) {
     let categoryId = event.target.dataset.categorieId
 
-    let gallery = document.querySelector(".gallery")
-    gallery.innerHTML = ''
+    /*let gallery = document.querySelector(".gallery")
+    gallery.innerHTML = ''*/
 
-    if (categoryId === undefined) {
+    document.querySelectorAll(".gallery figure").forEach(figure => {
+        if(categoryId == "") {
+            figure.style.display = "block"
+        } else {
+            if(categoryId == figure.dataset.categorieId) {
+                figure.style.display = "block"
+            } else {
+                figure.style.display = "none"
+            }    
+        }
+    })
+    /*if (categoryId === undefined) {
         let reponse = await fetch("http://localhost:5678/api/works")
         let data = await reponse.json()
 
@@ -83,7 +88,7 @@ async function filterProject(event) {
     } else {
         let reponse = await fetch("http://localhost:5678/api/works")
         let data = await reponse.json()
-
+ 
         data.forEach(projet => {
             if (projet.categoryId == categoryId) {
                 let figure = document.createElement("figure")
@@ -102,9 +107,36 @@ async function filterProject(event) {
                 gallery.appendChild(figure)
             }
         })
+    }*/
+    // Couleur de boutons
+    document.querySelectorAll(".button-filtre").forEach(button => {
+        button.classList.remove("active")
+    })
+    event.target.classList.add("active")
+}
+
+    
+  
+// Authentification check
+function checkAuthentication() {
+    const token = localStorage.getItem("token")
+    const loginLink = document.querySelector('nav ul li a[href="/FrontEnd/login.html"]')
+
+    if (token) {
+        loginLink.textContent = "logout"
+        loginLink.href = "#"
+        loginLink.addEventListener("click", function() {
+            localStorage.removeItem("token")
+            window.location.href = "/FrontEnd/index.html"
+        })
     }
-    }
-/*Changement d'apparence de lien quand cliqué
+}
+
+document.addEventListener("DOMContentLoaded", checkAuthentication)
+
+
+
+    /*Changement d'apparence de lien quand cliqué
     const lienNav = document.querySelectorAll("nav ul li")
     
     lienNav.forEach(item => {
@@ -113,21 +145,4 @@ async function filterProject(event) {
             //this.classList.toggle("lien-clique")
             
         })
-    })*/ 
-
-// Authentification check
-    function checkAuthentication() {
-        const token = localStorage.getItem("token")
-        const loginLink = document.querySelector('nav ul li a[href="/FrontEnd/login.html"]')
-    
-        if (token) {
-            loginLink.textContent = "logout"
-            loginLink.href = "#"
-            loginLink.addEventListener("click", function() {
-                localStorage.removeItem("token")
-                window.location.href = "/FrontEnd/index.html"
-            })
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", checkAuthentication)
+    })*/

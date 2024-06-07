@@ -2,14 +2,22 @@ loginUtilisateur()
 
 // Authentification de l’utilisateur
 function loginUtilisateur() {
-    const formLogin = document.querySelector(".form-login")
+    const errorDiv = document.getElementById("email-faux")
 
-    formLogin.addEventListener("submit", function (event) {
+    document.querySelector(".button-connexion").addEventListener("click", function (event) {
         event.preventDefault()
 
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-        
+        if(!email) {
+            errorDiv.innerText = "Merci de renseigner votre email"
+            return
+        }         
+        if(!password) {
+            errorDiv.innerText = "Merci de renseigner votre mot de passe"
+            return
+        }
+
         fetch("http://localhost:5678/api/users/login", {
             method: "POST",
             headers: { 
@@ -21,20 +29,8 @@ function loginUtilisateur() {
         .then(response=> {
             if(response.ok) {
                 return response.json()
-            } else {
-                if(response.status === 401) {
-                console.error("Non autorisé")
-                const UtilisateurFaux = document.getElementById("email-faux")
-                UtilisateurFaux.textContent = "Mot de passe incorrect"
-                UtilisateurFaux.style.display = "block"
-            } else {
-                console.error("Utilisateur non-existant")
-                const UtilisateurFaux = document.getElementById("email-faux")
-                UtilisateurFaux.textContent = "Utilisateur non-existant"
-                UtilisateurFaux.style.display = "block"
             }
-        }
-    })
+        })
         .then(data => {
             if(data.token) {
                 localStorage.setItem("token", data.token)
@@ -46,5 +42,24 @@ function loginUtilisateur() {
         })
     })
 }
+
+
+// Authentification check
+function checkAuthentication() {
+    const token = localStorage.getItem("token")
+    const loginLink = document.querySelector('nav ul li a[href="/FrontEnd/login.html"]')
+
+    if (token) {
+        loginLink.textContent = "logout"
+        loginLink.href = "#"
+        loginLink.addEventListener("click", function() {
+            localStorage.removeItem("token")
+            window.location.href = "/FrontEnd/index.html"
+        })
+    }
+}
+
+document.addEventListener("DOMContentLoaded", checkAuthentication)
+
 
 
