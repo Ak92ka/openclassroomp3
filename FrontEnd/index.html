@@ -7,6 +7,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="script.js" defer></script>
@@ -36,7 +37,19 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="outer-container">
+			<div class="inner-container">
+				<h2>Mes Projets</h2>
+				<a href="#modal1" class="js-modal hidden"><i class="fa-regular fa-pen-to-square"></i></a>
+				<a href="#modal1" class="js-modal hidden modifier-bouton">Modifier</a>
+			</div>
+		</div>
+		<aside id="modal1" class="modal" style="display: none;">
+			<div class="modal-wrapper js-modal-stop">
+				<i class="fa-solid fa-xmark js-modal-close"><span class="hidden">Fermer la boite</span></i>
+				<p>d</p>
+			</div>
+		</aside>
 		<div class="filtre">
 			<button class= "button-filtre" data-categorie-id="">Tous</button>
 		</div>

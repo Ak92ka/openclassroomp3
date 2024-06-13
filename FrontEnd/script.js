@@ -33,8 +33,6 @@ async function getCategoriesFiltre() {
     let boutonFiltre = document.querySelector(".filtre button")
     boutonFiltre.addEventListener("click", (filterProject))
     boutonFiltre.classList.add("active")
-    //const tousButton = document.querySelector(".button-filtre")
-    //tousButton.classList.add("active")
 
     categories.forEach( categorie => {
         let btnCategorie = document.createElement("button")
@@ -51,9 +49,6 @@ async function getCategoriesFiltre() {
 async function filterProject(event) {
     let categoryId = event.target.dataset.categorieId
 
-    /*let gallery = document.querySelector(".gallery")
-    gallery.innerHTML = ''*/
-
     document.querySelectorAll(".gallery figure").forEach(figure => {
         if(categoryId == "") {
             figure.style.display = "block"
@@ -65,59 +60,25 @@ async function filterProject(event) {
             }    
         }
     })
-    /*if (categoryId === undefined) {
-        let reponse = await fetch("http://localhost:5678/api/works")
-        let data = await reponse.json()
 
-        data.forEach(projet => {
-            let figure = document.createElement("figure")
-            figure.dataset.categorieId = projet.categoryId
-
-            let img = document.createElement("img")
-            img.src = projet.imageUrl
-            img.alt = projet.title
-
-            let figcaption = document.createElement("figcaption")
-            figcaption.textContent = projet.title
-
-            figure.appendChild(img)
-            figure.appendChild(figcaption)
-
-            gallery.appendChild(figure)
-        })
-    } else {
-        let reponse = await fetch("http://localhost:5678/api/works")
-        let data = await reponse.json()
- 
-        data.forEach(projet => {
-            if (projet.categoryId == categoryId) {
-                let figure = document.createElement("figure")
-                figure.dataset.categorieId = projet.categoryId
-
-                let img = document.createElement("img")
-                img.src = projet.imageUrl
-                img.alt = projet.title
-
-                let figcaption = document.createElement("figcaption")
-                figcaption.textContent = projet.title
-
-                figure.appendChild(img)
-                figure.appendChild(figcaption)
-
-                gallery.appendChild(figure)
-            }
-        })
-    }*/
     // Couleur de boutons
     document.querySelectorAll(".button-filtre").forEach(button => {
         button.classList.remove("active")
     })
     event.target.classList.add("active")
+} 
+
+// Afficher l'icone modifier après l'authentification
+document.addEventListener("DOMContentLoaded", function() {
+    const boutonModifier = document.querySelectorAll(".js-modal")
+
+function showElements() {
+    boutonModifier.forEach(e => {
+        e.classList.remove("hidden")
+    })
 }
 
-    
-  
-// Authentification check
+// Authentification Check
 function checkAuthentication() {
     const token = localStorage.getItem("token")
     const loginLink = document.querySelector('nav ul li a[href="/FrontEnd/login.html"]')
@@ -129,10 +90,52 @@ function checkAuthentication() {
             localStorage.removeItem("token")
             window.location.href = "/FrontEnd/index.html"
         })
+        showElements()
     }
 }
 
-document.addEventListener("DOMContentLoaded", checkAuthentication)
+checkAuthentication()
+
+})
+
+// La Modale
+let modal = null
+
+const openModal = function (e) {
+    e.preventDefault();
+    const target = document.querySelector(e.target.getAttribute("href"))
+    target.style.display = null
+    modal = target
+    modal.addEventListener("click", closeModal)
+    modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
+    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)    
+}
+
+const closeModal = function (e) {
+    e.preventDefault();
+    if(modal === null) return
+    modal.style.display = "none"
+    modal.removeEventListener("click", closeModal)
+    modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
+    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
+    modal = null
+}
+
+const stopPropagation = function (e) {
+    e.stopPropagation()
+}
+
+document.querySelectorAll(".js-modal").forEach(a => {
+    a.addEventListener("click", openModal)
+})
+
+window.addEventListener("keydown", function (e) {
+    if(e.key === "Escape" || e.key === "Esc") {
+        closeModal(e)
+    }
+})
+
+
 
 
 
