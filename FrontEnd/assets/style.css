@@ -132,6 +132,7 @@ li:hover {
 	display: flex;
     align-items: center;
 	justify-content: center;
+	padding-top: 42px;
 }
 
 .inner-container {
@@ -174,19 +175,54 @@ i {
 }
 
 .modal-wrapper {
-    overflow: auto;
-    width: 600px;
+	width: 415px;
+    height: 452px;
     max-width: calc(100vw - 20px);
     max-height: calc(100vw - 20px);
-    padding: 20px;
+    padding: 20px 68px;
     background-color: #FFF;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	border-radius: 10px;
 }
 
 .fa-xmark {
 	display: flex;
     justify-content: flex-end;
-	margin-left: 586px;
+	margin-left: 482px;
 	cursor: pointer;
+}
+
+.modal-title {
+	font-size: 21px;
+    font-family: inherit;
+	color: black;
+    font-weight: 500;
+	padding-top: 16px;
+    padding-bottom: 17px;
+}
+
+.modal-bouton {
+	background: #1D6154;
+    color: white;
+    border: 1px solid #1D6154;
+    border-radius: 20px;
+    padding: 7px 30px;
+    font: inherit;
+	cursor: pointer;
+}
+
+.gallery-modale {
+	width: 100%;
+    display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(67px, 1fr));    justify-items: center;
+    grid-gap: 20px;
+}
+
+.gallery-modale img {
+	width: 101%;
+    height: auto;
 }
 
 .lien-clique {
@@ -195,11 +231,12 @@ i {
 }
 
 .gallery {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+	width: 83%;
+    margin: 0px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
 }
 
 .filtre {
