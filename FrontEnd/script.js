@@ -27,23 +27,26 @@ async function getTravaux() {
 
 // Réalisation du filtre des travaux
 async function getCategoriesFiltre() {
-    let reponse = await fetch("http://localhost:5678/api/categories")
-    let categories = await reponse.json()
+    if(!localStorage.token) {
+        let reponse = await fetch("http://localhost:5678/api/categories")
+        let categories = await reponse.json()
+        
+        let boutonFiltre = document.querySelector(".filtre button")
+        boutonFiltre.addEventListener("click", (filterProject))
+        boutonFiltre.classList.add("active")
     
-    let boutonFiltre = document.querySelector(".filtre button")
-    boutonFiltre.addEventListener("click", (filterProject))
-    boutonFiltre.classList.add("active")
-
-    categories.forEach( categorie => {
-        let btnCategorie = document.createElement("button")
-        btnCategorie.dataset.categorieId = categorie.id
-        btnCategorie.innerText = categorie.name
-        btnCategorie.classList.add("button-filtre")
-        btnCategorie.addEventListener("click", (filterProject))
-
-        let filtre = document.querySelector(".filtre")
-        filtre.appendChild(btnCategorie)
-    })
+        categories.forEach( categorie => {
+            let btnCategorie = document.createElement("button")
+            btnCategorie.dataset.categorieId = categorie.id
+            btnCategorie.innerText = categorie.name
+            btnCategorie.classList.add("button-filtre")
+            btnCategorie.addEventListener("click", (filterProject))
+    
+            let filtre = document.querySelector(".filtre")
+            filtre.appendChild(btnCategorie)
+        })
+    
+    }
 
 }
 async function filterProject(event) {
@@ -91,12 +94,23 @@ function checkAuthentication() {
             window.location.href = "/FrontEnd/index.html"
         })
         showElements()
+        filtreDisparaitre()
     }
 }
 
 checkAuthentication()
 
 })
+
+// Disparaition de filtre apres l'authentification
+function filtreDisparaitre() {
+    const filtreModale = document.querySelector(".filtre")
+    filtreModale.remove()
+
+    const outerContainer = document.querySelector(".outer-container")
+    outerContainer.style.paddingBottom = "30px"
+    }
+
 
 // La Modale
 let modal = null
@@ -109,6 +123,7 @@ const openModal = function (e) {
     modal.addEventListener("click", closeModal)
     modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)    
+    getTravauxModale()
 }
 
 const closeModal = function (e) {
@@ -135,7 +150,32 @@ window.addEventListener("keydown", function (e) {
     }
 })
 
+//récuperation des gallerie dans la modale
+async function getTravauxModale() {
+    let reponse = await fetch("http://localhost:5678/api/works")
+    let data = await reponse.json()
 
+    let gallerieModale = document.querySelector(".gallery-modale")
+
+    gallerieModale.innerHTML = ""
+
+    data.forEach( projet => {
+        let figure = document.createElement("figure")
+        figure.dataset.categorieId = projet.categoryId
+        
+        let img = document.createElement("img")
+
+        img.src = projet.imageUrl
+        img.alt = projet.title
+
+        figure.appendChild(img)
+
+        gallerieModale.appendChild(figure)
+    })
+}
+
+
+// Ajout de galerie dans la modale
 
 
 
@@ -149,3 +189,18 @@ window.addEventListener("keydown", function (e) {
             
         })
     })*/
+
+
+
+    const navLinks = document.querySelectorAll("nav li")
+
+    navLinks.forEach(li => {
+        li.addEventListener("click", function() {
+            navLinks.forEach(link => {
+                link.classList.remove("lien-clique");
+            })
+
+            li.classList.add("lien-clique");
+            
+        })
+    })
