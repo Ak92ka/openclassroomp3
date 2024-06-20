@@ -29,6 +29,9 @@ function loginUtilisateur() {
         .then(response=> {
             if(response.ok) {
                 return response.json()
+            } else {
+                errorDiv.innerText = "Erreur dans l’identifiant ou le mot de passe"
+                return
             }
         })
         .then(data => {
@@ -62,4 +65,38 @@ function checkAuthentication() {
 document.addEventListener("DOMContentLoaded", checkAuthentication)
 
 
+// Regex login
+document.addEventListener("DOMContentLoaded", function() {
+    const inputEmail = document.getElementById("email")
+    //const inputPassword = document.getElementById("password")
+    
+    const emailError = document.getElementById("email-error")
+    //const passwordError = document.getElementById("password-error")
 
+    const emailNonExistant = document.querySelector(".email-faux")
+    
+    const patterns = {
+        email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+        password: /^[\w@-]{6,20}$/
+    }
+    
+    function validate(field, regex, errorElement) {
+        if(regex.test(field.value)) {
+            errorElement.style.display = "none"
+            emailNonExistant.style.display = "block"
+        } else {
+            errorElement.style.display = "block"
+            emailNonExistant.style.display = "none"
+        }
+    }
+        
+    inputEmail.addEventListener("keyup", (e) => {
+        validate(e.target, patterns.email, emailError)
+    })
+    
+    
+    /*inputPassword.addEventListener("keyup", (e) => {
+        validate(e.target, patterns.password, passwordError)
+    })*/
+    
+    })

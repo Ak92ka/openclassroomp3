@@ -28,13 +28,15 @@
 	<form action="" method="get" class="form-login">
 		<h2>Log in</h2>
 		<div class="login">
-			<p id="email-faux"></p>
+			<p class="email-faux" id="email-faux"></p>
+			<p id="email-error" class="error">Please enter a valid email address.</p>
 			<label for="email">E-mail</label>
 			<input type="text" name="email" id="email">
 		</div>
 		<div class="login">
 			<label for="password">Mot de passe</label>
 			<input type="password" name="password" id="password">
+			<p id="password-error" class="error">Password must be 6-20 characters long.</p>
 		</div>
 		<button type="submit" class="button-connexion">Se connecter</button>
 		<p class="pass-oublie">Mot de pass oublié</p>

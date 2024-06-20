@@ -40,17 +40,46 @@
 		<div class="outer-container">
 			<div class="inner-container">
 				<h2>Mes Projets</h2>
-				<a href="#modal1" class="js-modal hidden"><i class="fa-regular fa-pen-to-square"></i></a>
-				<a href="#modal1" class="js-modal hidden modifier-bouton">Modifier</a>
+				<a href="#modal-gallery" class="js-modal hidden"><i class="fa-regular fa-pen-to-square"></i></a>
+				<a href="#modal-gallery" class="js-modal hidden modifier-bouton">Modifier</a>
 			</div>
 		</div>
-		<aside id="modal1" class="modal" style="display: none;">
+		<aside id="modal-gallery" class="modal" style="display: none;">
 			<div class="modal-wrapper js-modal-stop">
 				<i class="fa-solid fa-xmark js-modal-close"><span class="hidden">Fermer la boite</span></i>
 				<h2 class="modal-title">Galerie photo</h2>
 				<div class="gallery-modale">
+					<i class="fa-solid fa-trash-can"></i>
 				</div>
+				<div class="bordeur"></div>
 				<button class="modal-bouton">Ajouter une photo</button>
+			</div>
+		</aside>
+		<aside id="modal-ajouter-photo" class="modal" style="display: none;">
+			<div class="modal-wrapper js-modal-stop">
+				<i class="fa-solid fa-xmark js-modal-close"><span class="hidden">Fermer la boite</span></i>
+				<i class="fa-solid fa-arrow-left js-modal-close"><span class="hidden">Retourner</span></i>
+				<h2 class="modal-title">Ajout photo</h2>
+				<div class="ajout-photo-container">
+					<i class="fa-regular fa-image"></i>
+					<button class="button-ajouter-photo">+ Ajouter Photo</button>
+					<p class="max-upload">jpg, png : 4mo max</p>
+				</div>
+				<form action="" method="post" id="upload-photo-form">
+					<input type="file" id="photo" name="image" class="photo" accept="image/*" style="display:none;">
+					<label for="titre">Titre</label>
+					<input type="text" id="titre" name="titre" class="titre">
+					
+					<label for="categorie">Catégorie</label>
+					<select id="categorie" name="categorie" class="categorie">
+						<option value=""></option>
+						<option value="Objets">Objets</option>
+						<option value="Appartements">Appartements</option>
+						<option value="Hotels & restaurants">Hotels & restaurants</option>
+					</select>
+					<div class="bordeur"></div>
+					<button class="modal-valider">valider</button>	
+				</form>
 			</div>
 		</aside>
 		<div class="filtre">
