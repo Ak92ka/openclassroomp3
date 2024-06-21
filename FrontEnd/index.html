@@ -10,11 +10,12 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="shortcut icon" href="./assets/icons/instagram.png" type="image/x-icon">
 	<script src="script.js" defer></script>
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+	<a href="/FrontEnd/index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
 	<nav>
 		<ul>
 			<li><a href="#portfolio">projets</a></li>
@@ -64,6 +65,9 @@
 					<i class="fa-regular fa-image"></i>
 					<button class="button-ajouter-photo">+ Ajouter Photo</button>
 					<p class="max-upload">jpg, png : 4mo max</p>
+				</div>
+				<div id="target-image">
+					<img src="">
 				</div>
 				<form action="" method="post" id="upload-photo-form">
 					<input type="file" id="photo" name="image" class="photo" accept="image/*" style="display:none;">

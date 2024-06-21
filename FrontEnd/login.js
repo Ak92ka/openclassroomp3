@@ -68,10 +68,10 @@ document.addEventListener("DOMContentLoaded", checkAuthentication)
 // Regex login
 document.addEventListener("DOMContentLoaded", function() {
     const inputEmail = document.getElementById("email")
-    //const inputPassword = document.getElementById("password")
+    const inputPassword = document.getElementById("password")
     
     const emailError = document.getElementById("email-error")
-    //const passwordError = document.getElementById("password-error")
+    const passwordError = document.getElementById("password-error")
 
     const emailNonExistant = document.querySelector(".email-faux")
     
@@ -95,8 +95,8 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     
     
-    /*inputPassword.addEventListener("keyup", (e) => {
+    inputPassword.addEventListener("keyup", (e) => {
         validate(e.target, patterns.password, passwordError)
-    })*/
+    })
     
     })
