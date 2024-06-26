@@ -59,8 +59,9 @@
 		<aside id="modal-ajouter-photo" class="modal" style="display: none;">
 			<div class="modal-wrapper js-modal-stop">
 				<i class="fa-solid fa-xmark js-modal-close"><span class="hidden">Fermer la boite</span></i>
-				<i class="fa-solid fa-arrow-left js-modal-close"><span class="hidden">Retourner</span></i>
+				<i class="fa-solid fa-arrow-left js-modal-return"><span class="hidden">Retourner</span></i>
 				<h2 class="modal-title">Ajout photo</h2>
+				<p id="image-error" class="error image-error">insérer une image</p>
 				<div class="ajout-photo-container">
 					<i class="fa-regular fa-image"></i>
 					<button class="button-ajouter-photo">+ Ajouter Photo</button>
@@ -69,20 +70,21 @@
 				<div id="target-image">
 					<img src="">
 				</div>
-				<form action="" method="post" id="upload-photo-form">
+				<form action="" id="upload-photo-form">
 					<input type="file" id="photo" name="image" class="photo" accept="image/*" style="display:none;">
 					<label for="titre">Titre</label>
+					<p id="titre-error" class="error">insérer un titre</p>
 					<input type="text" id="titre" name="titre" class="titre">
-					
 					<label for="categorie">Catégorie</label>
+					<p id="category-error" class="error">Mettez une catégorie</p>
 					<select id="categorie" name="categorie" class="categorie">
 						<option value=""></option>
-						<option value="Objets">Objets</option>
-						<option value="Appartements">Appartements</option>
-						<option value="Hotels & restaurants">Hotels & restaurants</option>
+						<option value="1">Objets</option>
+						<option value="2">Appartements</option>
+						<option value="3">Hotels & restaurants</option>
 					</select>
 					<div class="bordeur"></div>
-					<button class="modal-valider">valider</button>	
+					<button type="submit" class="modal-valider">valider</button>	
 				</form>
 			</div>
 		</aside>

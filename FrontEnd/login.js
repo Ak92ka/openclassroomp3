@@ -100,3 +100,26 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     
     })
+
+//Changement d'apparence de lien quand cliqué
+const navLinks = document.querySelectorAll("nav li")
+const currentPage = window.location.pathname
+
+navLinks.forEach(li => {
+    const anchor = li.querySelector("a")
+    if(anchor) {
+    const linkHref = anchor.getAttribute("href")
+    const linkPath = new URL(linkHref, window.location.origin).pathname
+    if (linkPath === currentPage) {
+        li.classList.add("lien-clique")
+    }
+}
+    li.addEventListener("click", function() {
+        navLinks.forEach(link => {
+            link.classList.remove("lien-clique")
+        })
+
+        li.classList.add("lien-clique")
+        
+    })
+})

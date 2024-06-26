@@ -9,18 +9,18 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="shortcut icon" href="./assets/icons/instagram.png" type="image/x-icon">
 	<script src="login.js" defer></script>
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+	<a href="/FrontEnd/index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
 	<nav>
 		<ul>
 			<li><a href="/FrontEnd/#portfolio">projets</a></li>
 			<li><a href="/FrontEnd/#contact">contact</a></li>
 			<li><a href="/FrontEnd/login.html">login</a></li>
-			<a href="/FrontEnd/index.html"></a>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			<li><a href=""><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
 		</ul>
 	</nav>
 </header>
@@ -29,17 +29,24 @@
 		<h2>Log in</h2>
 		<div class="login">
 			<p class="email-faux" id="email-faux"></p>
-			<p id="email-error" class="error">Please enter a valid email address.</p>
+			<p id="email-error" class="error">Mettez une adresse email valide</p>
 			<label for="email">E-mail</label>
 			<input type="text" name="email" id="email">
 		</div>
 		<div class="login">
 			<label for="password">Mot de passe</label>
 			<input type="password" name="password" id="password">
-			<p id="password-error" class="error">Password must be 6-20 characters long.</p>
+			<p id="password-error" class="error">Mot de passe doit comporter entre 6 et 20 caractères</p>
 		</div>
 		<button type="submit" class="button-connexion">Se connecter</button>
 		<p class="pass-oublie">Mot de pass oublié</p>
 	</form>
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
 </body>
 </html>

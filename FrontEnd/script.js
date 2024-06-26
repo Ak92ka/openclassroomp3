@@ -66,11 +66,11 @@ async function filterProject(event) {
         }
     })
 
-    // Couleur de boutons
-    document.querySelectorAll(".button-filtre").forEach(button => {
-        button.classList.remove("active")
-    })
-    event.target.classList.add("active")
+// Couleur de boutons
+document.querySelectorAll(".button-filtre").forEach(button => {
+    button.classList.remove("active")
+})
+event.target.classList.add("active")
 } 
 
 // Afficher l'icone modifier après l'authentification
@@ -113,7 +113,7 @@ function filtreDisparaitre() {
 let modalGallery = null
 
 const openModal = function (e) {
-    e.preventDefault();
+    e.preventDefault()
     const target = document.querySelector(e.target.getAttribute("href"))
     target.style.display = null
     modalGallery = target
@@ -124,7 +124,7 @@ const openModal = function (e) {
 }
 
 const closeModalGallery = function (e) {
-    e.preventDefault();
+    e.preventDefault()
     if(modalGallery === null) return
     modalGallery.style.display = "none"
     modalGallery.removeEventListener("click", closeModalGallery)
@@ -209,13 +209,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const ajouterPhotoButton = document.querySelector(".modal-bouton")
 
     ajouterPhotoButton.addEventListener("click", function(e) {
-        e.preventDefault();
+        e.preventDefault()
         const secondModal = document.getElementById("modal-ajouter-photo")
         if (secondModal) {
             secondModal.style.display = null
             modalAjouterPhoto = secondModal
             modalAjouterPhoto.addEventListener("click", closeModalAjouterPhoto)
-            modalAjouterPhoto.querySelector(".js-modal-close").addEventListener("click", closeModalAjouterPhoto)
+            modalAjouterPhoto.querySelectorAll(".js-modal-close, .js-modal-return").forEach(element => {
+                element.addEventListener("click", closeModalAjouterPhoto)
+            })
             modalAjouterPhoto.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
         }
     })
@@ -225,7 +227,9 @@ document.addEventListener("DOMContentLoaded", function() {
         if (modalAjouterPhoto === null) return
         modalAjouterPhoto.style.display = "none"
         modalAjouterPhoto.removeEventListener("click", closeModalAjouterPhoto)
-        modalAjouterPhoto.querySelector(".js-modal-close").removeEventListener("click", closeModalAjouterPhoto)
+        modalAjouterPhoto.querySelectorAll(".js-modal-close, .js-modal-return").forEach(element => {
+            element.removeEventListener("click", closeModalAjouterPhoto)
+        })
         modalAjouterPhoto.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
         modalAjouterPhoto = null
     }
@@ -242,142 +246,151 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 // Fonctionalité d'ajouter une photo
-document.addEventListener("DOMContentLoaded", function() {
-    const ajouterPhotoButton  = document.querySelector(".button-ajouter-photo")
-    const fileInput = document.getElementById("photo")
-    const form = document.getElementById("upload-photo-form")
-    const validerButton = document.querySelector(".modal-valider")
+const ajouterPhotoButton  = document.querySelector(".button-ajouter-photo")
+const fileInput = document.getElementById("photo")
+const form = document.getElementById("upload-photo-form")
+const validerButton = document.querySelector(".modal-valider")
+const modal = document.getElementById("modal-ajouter-photo")
+const photoGallery = document.getElementById("photo-gallery")
 
-    ajouterPhotoButton.addEventListener("click", function() {
-        fileInput.click()
-    })
+ajouterPhotoButton.addEventListener("click", function() {
+    fileInput.click()
+})
+
+fileInput.addEventListener("change", function(event) {
+    displayImage(event)
+    updateValiderButtonState()
+})
+
+form.addEventListener("input", function() {
+    updateValiderButtonState()
+})
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault()
+        
+    const title = document.getElementById("titre").value.trim()
+    const categorie = document.getElementById("categorie").value
+    const image = document.getElementById("photo").files[0]
     
-    fileInput.addEventListener("change", function(event) {
-        displayImage(event)
-        updateValiderButtonState()
+    const formData = new FormData()
+    formData.append("title", title)
+    formData.append("category", categorie)
+    formData.append("image", image)
+    const token = localStorage.getItem("token")
+
+    //regex ajout photo
+    if (!title) {
+        const titreError = document.getElementById("titre-error")
+        titreError.style.display = "block"
+        form.disabled = true
+        return
+    } 
+    
+    document.getElementById("titre").addEventListener("keyup", function() {
+            const titreError = document.getElementById("titre-error")
+            titreError.style.display = "none"
     })
-
-    form.addEventListener("input", function() {
-        updateValiderButtonState()
-    })
-
-    document.querySelector(".modal-valider").addEventListener("click", async function(event) {
-        event.preventDefault()
-        const title = document.getElementById("titre").value.trim()
-        const categorie = document.getElementById("categorie").value
-        const image = document.getElementById("photo").files[0]
-        const formData = new FormData()
-        formData.append("title", title)
-        formData.append("category", categorie)
-        formData.append("image", image)
-        const token = localStorage.getItem("token")
-
-        try {
-            const response = await fetch("http://localhost:5678/api/works", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Accept": "application/json"
-                },
-                body: formData
-            })
-
-            if (response.ok) {
-                const result = await response.json()
-                console.log("Photo uploaded successfully:", result)
-                /*form.reset()
-                closeModal()
-
-                const imageElement = document.createElement("img")
-                imageElement.src = result.imageUrl
-                imageElement.alt = result.title
-
-                const galleryItem = document.createElement("div")
-                galleryItem.appendChild(imageElement)
-
-                document.querySelector(".gallery").appendChild(galleryItem)
-                document.querySelector(".gallery-modale").appendChild(galleryItem.cloneNode(true))
-                document.querySelector(".ajout-photo-container").appendChild(galleryItem.cloneNode(true))
-            */
-            } else {
-                console.error("Failed to upload photo:", response.statusText)
-            }
-        } catch (error) {
-            console.error("Error during photo upload:", error)
-        }
-    })
-
-    function displayImage(event) {
-        const file = event.target.files[0];
-    /*const error = document.getElementById('return_add');
-    if (file.size > 4 * 1024 * 1024) {
-        error.classList.add('red');
-        error.innerText = "L'image doit être inférieure à 4 Mo";
-        setTimeout(() => {error.innerText = "";}, 4000);
-        return;
-    }*/
-    document.querySelector('.ajout-photo-container').style.display = "none";
-    document.getElementById('target-image').style.display = "flex";
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.querySelector('#target-image img').src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+        
+        if (!categorie) {
+        const categoryError = document.getElementById("category-error")
+        categoryError.style.display = "block"
+        form.disabled = true
+        return
     }
-
-    // Changement de couleur de valider bouton
-    function checkInputsCompleted() {
-        const titreInput = document.getElementById("titre").value.trim()
-        const categorieInput = document.getElementById("categorie").value.trim()
-        const fileSelected = fileInput.files.length > 0
-
-        return titreInput !== "" && categorieInput !== "" && fileSelected
+    document.getElementById("categorie").addEventListener("change", function() {
+        const categoryError = document.getElementById("category-error")
+        categoryError.style.display = "none"
+})
+    if (!image) {
+        const imageError = document.getElementById("image-error")
+        const imageErrorCss = document.querySelector(".image-error")
+        imageError.style.display = "block"
+        imageErrorCss.style.display = "block"
+        form.disabled = true
+        return
     }
+//
+    try {
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/json"
+            },
+            body: formData
+        })
 
-    function updateValiderButtonState() {
-        if (checkInputsCompleted()) {
-            validerButton.classList.add("green-button")
+        if (response.ok) {
+            const result = await response.json()
+            console.log("Photo uploaded successfully:", result)
+            form.reset()
+            console.log("Form values after reset:", title, categorie, image)
+            closeModal()
         } else {
-            validerButton.classList.remove("green-button")
+            console.error("Failed to upload photo:", response.statusText)
         }
-    }
-
-    function updateValiderButtonState() {
-        if (checkInputsCompleted()) {
-            validerButton.classList.add("green-button")
-        } else {
-            validerButton.classList.remove("green-button")
-        }
+    } catch (error) {
+        console.error("Error during photo upload:", error)
     }
 })
 
+function displayImage(event) {
+    const file = event.target.files[0]
+
+    document.querySelector('.ajout-photo-container').style.display = "none"
+    document.getElementById('target-image').style.display = "flex"
+    const reader = new FileReader()
+    reader.onload = function(e) {
+        document.querySelector('#target-image img').src = e.target.result
+}
+reader.readAsDataURL(file)
+}
 
 
-    /*Changement d'apparence de lien quand cliqué
-    const lienNav = document.querySelectorAll("nav ul li")
-    
-    lienNav.forEach(item => {
-        item.addEventListener("click", function() {
-            this.classList.add("lien-clique")
-            //this.classList.toggle("lien-clique")
-            
+// Changement de couleur de valider bouton
+function checkInputsCompleted() {
+    const titreInput = document.getElementById("titre").value.trim()
+    const categorieInput = document.getElementById("categorie").value.trim()
+    const fileSelected = fileInput.files.length > 0
+
+    return titreInput !== "" && categorieInput !== "" && fileSelected
+}
+
+function updateValiderButtonState() {
+    if (checkInputsCompleted()) {
+        validerButton.classList.add("green-button")
+    } else {
+        validerButton.classList.remove("green-button")
+    }
+}
+
+function closeModal() {
+    modal.style.display = "none";
+    document.querySelector('.ajout-photo-container').style.display = "flex";
+    document.getElementById('target-image').style.display = "none"
+}
+
+
+//Changement d'apparence de lien quand cliqué
+const navLinks = document.querySelectorAll("nav li")
+const currentPage = window.location.pathname
+
+navLinks.forEach(li => {
+    const anchor = li.querySelector("a")
+    if(anchor) {
+    const linkHref = anchor.getAttribute("href")
+    const linkPath = new URL(linkHref, window.location.origin).pathname
+    if (linkPath === currentPage) {
+        li.classList.add("lien-clique")
+    }
+}
+    li.addEventListener("click", function() {
+        navLinks.forEach(link => {
+            link.classList.remove("lien-clique")
         })
-    })*/
 
-
-
-    const navLinks = document.querySelectorAll("nav li")
-
-    navLinks.forEach(li => {
-        li.addEventListener("click", function() {
-            navLinks.forEach(link => {
-                link.classList.remove("lien-clique");
-            })
-
-            li.classList.add("lien-clique");
-            
-        })
+        li.classList.add("lien-clique")
+        
     })
-
-
-    
+})
