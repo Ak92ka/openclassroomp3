@@ -46,7 +46,6 @@ function loginUtilisateur() {
     })
 }
 
-
 // Authentification check
 function checkAuthentication() {
     const token = localStorage.getItem("token")
@@ -63,7 +62,6 @@ function checkAuthentication() {
 }
 
 document.addEventListener("DOMContentLoaded", checkAuthentication)
-
 
 // Regex login
 document.addEventListener("DOMContentLoaded", function() {
@@ -94,11 +92,9 @@ document.addEventListener("DOMContentLoaded", function() {
         validate(e.target, patterns.email, emailError)
     })
     
-    
     inputPassword.addEventListener("keyup", (e) => {
         validate(e.target, patterns.password, passwordError)
     })
-    
     })
 
 //Changement d'apparence de lien quand cliqué

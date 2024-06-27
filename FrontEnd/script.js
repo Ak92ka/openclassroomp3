@@ -2,7 +2,6 @@ getTravaux()
 getCategoriesFiltre()
 checkAuthentication()
 
-
 // Récupération des travaux depuis le back-end
 async function getTravaux() {
     let reponse = await fetch("http://localhost:5678/api/works")
@@ -51,6 +50,7 @@ async function getCategoriesFiltre() {
     }
 
 }
+
 async function filterProject(event) {
     let categoryId = event.target.dataset.categorieId
 
@@ -74,7 +74,6 @@ event.target.classList.add("active")
 } 
 
 // Afficher l'icone modifier après l'authentification
-
 function showElements() {
     const boutonModifier = document.querySelectorAll(".js-modal")
 
@@ -82,6 +81,7 @@ function showElements() {
         e.classList.remove("hidden")
     })
 }
+
 // Authentification Check
 function checkAuthentication() {
     const token = localStorage.getItem("token")
@@ -107,7 +107,6 @@ function filtreDisparaitre() {
     const outerContainer = document.querySelector(".outer-container")
     outerContainer.style.paddingBottom = "30px"
 }
-
 
 // La Modale
 let modalGallery = null
@@ -174,7 +173,7 @@ async function getTravauxModale() {
         figure.appendChild(corbeilleIcone)
         gallerieModale.appendChild(figure)
 
-        // Suppression de la galerie dans la modale
+// Suppression de la galerie dans la modale
         corbeilleIcone.addEventListener("click", async function(event) {
             event.preventDefault()
     
@@ -201,7 +200,6 @@ async function getTravauxModale() {
         })
 }
 
-  
 // Ajout photo modal
 let modalAjouterPhoto = null
 
@@ -279,28 +277,31 @@ form.addEventListener("submit", async function(event) {
     formData.append("image", image)
     const token = localStorage.getItem("token")
 
-    //regex ajout photo
+//regex ajout photo
     if (!title) {
         const titreError = document.getElementById("titre-error")
         titreError.style.display = "block"
-        form.disabled = true
-        return
+        validerButton.type = "button"
     } 
-    
+    else {   
+        const titreError = document.getElementById("titre-error")
+        titreError.style.display = "none"
+        validerButton.type = "submit"       
+    }
     document.getElementById("titre").addEventListener("keyup", function() {
-            const titreError = document.getElementById("titre-error")
-            titreError.style.display = "none"
+        const titreError = document.getElementById("titre-error")
+        titreError.style.display = "none"       
     })
         
-        if (!categorie) {
-        const categoryError = document.getElementById("category-error")
-        categoryError.style.display = "block"
-        form.disabled = true
-        return
+    if (!categorie) {
+    const categoryError = document.getElementById("category-error")
+    categoryError.style.display = "block"
+    validerButton.type = "button"
     }
     document.getElementById("categorie").addEventListener("change", function() {
         const categoryError = document.getElementById("category-error")
         categoryError.style.display = "none"
+        validerButton.type = "submit"
 })
     if (!image) {
         const imageError = document.getElementById("image-error")
@@ -308,6 +309,31 @@ form.addEventListener("submit", async function(event) {
         imageError.style.display = "block"
         imageErrorCss.style.display = "block"
         form.disabled = true
+        return
+    } 
+    const imgElement = document.querySelector("#target-image img")
+    if(imgElement.src.length > 0){
+        const imageError = document.getElementById("image-error")
+        const imageErrorCss = document.querySelector(".image-error")
+        imageError.style.display = "none"
+        imageErrorCss.style.display = "none"
+    }
+    
+
+    /*if(image) {
+        const imageError = document.getElementById("image-error")
+        const imageErrorCss = document.querySelector(".image-error")
+        imageError.style.display = "block"
+        imageErrorCss.style.display = "block"
+    }*/
+    
+    if(!title && !categorie) {
+        const titreError = document.getElementById("titre-error")
+        titreError.style.display = "block"
+        validerButton.type = "button"
+        const categoryError = document.getElementById("category-error")
+        categoryError.style.display = "block"
+        validerButton.type = "button"
         return
     }
 //
@@ -347,6 +373,19 @@ function displayImage(event) {
 reader.readAsDataURL(file)
 }
 
+//form & photo reset 
+document.querySelectorAll(".js-modal-close").forEach(e => {
+    e.addEventListener("click", function() {
+        form.reset()
+
+        const imgElement = document.querySelector("#target-image img")
+        imgElement.src = ""
+        const targetImageDiv = document.getElementById("target-image")
+        targetImageDiv.style.display = "none"
+        const ajoutPhotoContainer = document.querySelector(".ajout-photo-container")
+        ajoutPhotoContainer.style.display = "flex"    
+    })
+})
 
 // Changement de couleur de valider bouton
 function checkInputsCompleted() {
@@ -370,7 +409,6 @@ function closeModal() {
     document.querySelector('.ajout-photo-container').style.display = "flex";
     document.getElementById('target-image').style.display = "none"
 }
-
 
 //Changement d'apparence de lien quand cliqué
 const navLinks = document.querySelectorAll("nav li")
