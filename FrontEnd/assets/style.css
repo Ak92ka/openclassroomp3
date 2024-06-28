@@ -286,11 +286,12 @@ i {
 
 .gallery-modale img {
 	width: 101%;
-    height: auto;
+	height: 100%;
 }
 
 .gallery-modale figure {
     position: relative;
+	height: 94px;
 }
 
 .gallery figure {
