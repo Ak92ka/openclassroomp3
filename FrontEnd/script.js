@@ -12,6 +12,7 @@ async function getTravaux() {
     data.forEach( projet => {
         let figure = document.createElement("figure")
         figure.dataset.categorieId = projet.categoryId
+        figure.dataset.photoId = projet.id
         let img = document.createElement("img")
         let figcaption = document.createElement("figcaption")
 
@@ -85,14 +86,14 @@ function showElements() {
 // Authentification Check
 function checkAuthentication() {
     const token = localStorage.getItem("token")
-    const loginLink = document.querySelector('nav ul li a[href="/FrontEnd/login.html"]')
+    const loginLink = document.querySelector('nav ul li:nth-child(3) a')
 
     if (token) {
-        loginLink.textContent = "logout"
+        loginLink.innerText = "logout"
         loginLink.href = "#"
         loginLink.addEventListener("click", function() {
             localStorage.removeItem("token")
-            window.location.href = "/FrontEnd/index.html"
+            window.location.href = "./index.html"
         })
         showElements()
         filtreDisparaitre()
@@ -123,7 +124,6 @@ const openModal = function (e) {
 }
 
 const closeModalGallery = function (e) {
-    e.preventDefault()
     if(modalGallery === null) return
     modalGallery.style.display = "none"
     modalGallery.removeEventListener("click", closeModalGallery)
@@ -160,6 +160,7 @@ async function getTravauxModale() {
     data.forEach( projet => {
         let figure = document.createElement("figure")
         figure.dataset.categorieId = projet.categoryId
+        figure.dataset.photoId = projet.id
         
         let img = document.createElement("img")
         img.src = projet.imageUrl
@@ -188,6 +189,10 @@ async function getTravauxModale() {
     
                 if(deleteReponse.ok) {
                     figure.remove()
+                    const mainFigure = document.querySelector(`.gallery figure[data-categorie-id="${projet.categoryId}"][data-photo-id="${projet.id}"]`);
+                    if (mainFigure) {
+                        mainFigure.remove()
+                    }
                 } else if (deleteReponse.status === 403) {
                     console.error("Forbidden: You do not have permission to delete this item");
                 } else {
@@ -210,6 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
         e.preventDefault()
         const secondModal = document.getElementById("modal-ajouter-photo")
         if (secondModal) {
+            closeModalGallery()
             secondModal.style.display = null
             modalAjouterPhoto = secondModal
             modalAjouterPhoto.addEventListener("click", closeModalAjouterPhoto)
@@ -219,18 +225,7 @@ document.addEventListener("DOMContentLoaded", function() {
             modalAjouterPhoto.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
         }
     })
-
-    function closeModalAjouterPhoto(e) {
-        e.preventDefault()
-        if (modalAjouterPhoto === null) return
-        modalAjouterPhoto.style.display = "none"
-        modalAjouterPhoto.removeEventListener("click", closeModalAjouterPhoto)
-        modalAjouterPhoto.querySelectorAll(".js-modal-close, .js-modal-return").forEach(element => {
-            element.removeEventListener("click", closeModalAjouterPhoto)
-        })
-        modalAjouterPhoto.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
-        modalAjouterPhoto = null
-    }
+    
 
     function stopPropagation(e) {
         e.stopPropagation()
@@ -241,7 +236,20 @@ document.addEventListener("DOMContentLoaded", function() {
             closeModalAjouterPhoto(e)
         }
     })
+
+
 })
+
+function closeModalAjouterPhoto(e) {
+    if (modalAjouterPhoto === null) return
+    modalAjouterPhoto.style.display = "none"
+    modalAjouterPhoto.removeEventListener("click", closeModalAjouterPhoto)
+    modalAjouterPhoto.querySelectorAll(".js-modal-close, .js-modal-return").forEach(element => {
+        element.removeEventListener("click", closeModalAjouterPhoto)
+    })
+    modalAjouterPhoto.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
+    modalAjouterPhoto = null
+}
 
 // Fonctionalité d'ajouter une photo
 const ajouterPhotoButton  = document.querySelector(".button-ajouter-photo")
@@ -271,22 +279,16 @@ form.addEventListener("submit", async function(event) {
     const categorie = document.getElementById("categorie").value
     const image = document.getElementById("photo").files[0]
     
-    const formData = new FormData()
-    formData.append("title", title)
-    formData.append("category", categorie)
-    formData.append("image", image)
-    const token = localStorage.getItem("token")
-
 //regex ajout photo
     if (!title) {
         const titreError = document.getElementById("titre-error")
         titreError.style.display = "block"
-        validerButton.type = "button"
+        validerButton.disabled = true
     } 
     else {   
         const titreError = document.getElementById("titre-error")
         titreError.style.display = "none"
-        validerButton.type = "submit"       
+        validerButton.removeAttribute("disabled")     
     }
     document.getElementById("titre").addEventListener("keyup", function() {
         const titreError = document.getElementById("titre-error")
@@ -296,12 +298,12 @@ form.addEventListener("submit", async function(event) {
     if (!categorie) {
     const categoryError = document.getElementById("category-error")
     categoryError.style.display = "block"
-    validerButton.type = "button"
-    }
+    validerButton.disabled = true
+}
     document.getElementById("categorie").addEventListener("change", function() {
         const categoryError = document.getElementById("category-error")
         categoryError.style.display = "none"
-        validerButton.type = "submit"
+        validerButton.removeAttribute("disabled")
 })
     if (!image) {
         const imageError = document.getElementById("image-error")
@@ -311,15 +313,25 @@ form.addEventListener("submit", async function(event) {
         form.disabled = true
         return
     } 
-    const imgElement = document.querySelector("#target-image img")
-    if(imgElement.src.length > 0){
+    if (image) {
+    document.getElementById("photo").addEventListener("change", function() {
         const imageError = document.getElementById("image-error")
         const imageErrorCss = document.querySelector(".image-error")
         imageError.style.display = "none"
         imageErrorCss.style.display = "none"
+        
+    })
     }
     
+    /*const imgElement = document.querySelector("#target-image img")
 
+    if (imgElement.src.length > 0) {
+        const imageError = document.getElementById("image-error")
+        const imageErrorCss = document.querySelector(".image-error")
+        imageError.style.display = "none"
+        imageErrorCss.style.display = "none"
+    }*/
+    
     /*if(image) {
         const imageError = document.getElementById("image-error")
         const imageErrorCss = document.querySelector(".image-error")
@@ -337,6 +349,16 @@ form.addEventListener("submit", async function(event) {
         return
     }
 //
+console.log(title)
+console.log(categorie)
+console.log(image)
+
+const formData = new FormData()
+formData.append("title", title)
+formData.append("category", categorie)
+formData.append("image", image)
+const token = localStorage.getItem("token")
+console.log(token)
     try {
         const response = await fetch("http://localhost:5678/api/works", {
             method: "POST",
@@ -351,8 +373,16 @@ form.addEventListener("submit", async function(event) {
             const result = await response.json()
             console.log("Photo uploaded successfully:", result)
             form.reset()
-            console.log("Form values after reset:", title, categorie, image)
-            closeModal()
+            const imgElement = document.querySelector("#target-image img")
+            imgElement.src = ""
+            const targetImageDiv = document.getElementById("target-image")
+            targetImageDiv.style.display = "none"
+            const ajoutPhotoContainer = document.querySelector(".ajout-photo-container")
+            ajoutPhotoContainer.style.display = "flex"
+            const newFigureMain = createPhotoFigure(result)
+            document.querySelector(".gallery").append(newFigureMain)
+            closeModalAjouterPhoto()
+            closeModalGallery()
         } else {
             console.error("Failed to upload photo:", response.statusText)
         }
@@ -360,6 +390,26 @@ form.addEventListener("submit", async function(event) {
         console.error("Error during photo upload:", error)
     }
 })
+
+function createPhotoFigure(photoData, isModal = false) {
+    const figure = document.createElement("figure");
+    figure.dataset.categorieId = photoData.categoryId;
+    figure.dataset.photoId = photoData.id
+
+    const img = document.createElement("img");
+    img.src = photoData.imageUrl;
+    img.alt = photoData.title;
+
+
+    let figcaption = document.createElement("figcaption")
+
+    figcaption.textContent = photoData.title
+
+    figure.appendChild(img)
+    figure.appendChild(figcaption)
+
+    return figure
+}
 
 function displayImage(event) {
     const file = event.target.files[0]
@@ -386,6 +436,17 @@ document.querySelectorAll(".js-modal-close").forEach(e => {
         ajoutPhotoContainer.style.display = "flex"    
     })
 })
+
+document.querySelector(".js-modal-return").addEventListener("click", function() {
+        form.reset()
+
+        const imgElement = document.querySelector("#target-image img")
+        imgElement.src = ""
+        const targetImageDiv = document.getElementById("target-image")
+        targetImageDiv.style.display = "none"
+        const ajoutPhotoContainer = document.querySelector(".ajout-photo-container")
+        ajoutPhotoContainer.style.display = "flex"    
+    })
 
 // Changement de couleur de valider bouton
 function checkInputsCompleted() {
