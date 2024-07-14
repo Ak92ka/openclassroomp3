@@ -1,13 +1,14 @@
 getTravaux()
 getCategoriesFiltre()
 checkAuthentication()
+getEditionDiv()
 
 // Récupération des travaux depuis le back-end
 async function getTravaux() {
     let reponse = await fetch("http://localhost:5678/api/works")
     let data = await reponse.json()
 
-    let gallerie = document.querySelector(".gallery")
+    let galerie = document.querySelector(".gallery")
 
     data.forEach( projet => {
         let figure = document.createElement("figure")
@@ -23,7 +24,7 @@ async function getTravaux() {
         figure.appendChild(img)
         figure.appendChild(figcaption)
 
-        gallerie.appendChild(figure)
+        galerie.appendChild(figure)
     })
 }
 
@@ -47,9 +48,7 @@ async function getCategoriesFiltre() {
             let filtre = document.querySelector(".filtre")
             filtre.appendChild(btnCategorie)
         })
-    
     }
-
 }
 
 async function filterProject(event) {
@@ -68,20 +67,11 @@ async function filterProject(event) {
     })
 
 // Couleur de boutons
-document.querySelectorAll(".button-filtre").forEach(button => {
-    button.classList.remove("active")
-})
-event.target.classList.add("active")
-} 
-
-// Afficher l'icone modifier après l'authentification
-function showElements() {
-    const boutonModifier = document.querySelectorAll(".js-modal")
-
-    boutonModifier.forEach(e => {
-        e.classList.remove("hidden")
+    document.querySelectorAll(".button-filtre").forEach(button => {
+        button.classList.remove("active")
     })
-}
+    event.target.classList.add("active")
+} 
 
 // Authentification Check
 function checkAuthentication() {
@@ -100,10 +90,19 @@ function checkAuthentication() {
     }
 }
 
+// Afficher l'icone modifier après l'authentification
+function showElements() {
+    const boutonModifier = document.querySelectorAll(".js-modal")
+
+    boutonModifier.forEach(e => {
+        e.classList.remove("hidden")
+    })
+}
+
 // Disparaition de filtre apres l'authentification
 function filtreDisparaitre() {
-    const filtreModale = document.querySelector(".filtre")
-    filtreModale.remove()
+    const filtreGallerie = document.querySelector(".filtre")
+    filtreGallerie.remove()
 
     const outerContainer = document.querySelector(".outer-container")
     outerContainer.style.paddingBottom = "30px"
@@ -194,7 +193,7 @@ async function getTravauxModale() {
                         mainFigure.remove()
                     }
                 } else if (deleteReponse.status === 403) {
-                    console.error("Forbidden: You do not have permission to delete this item");
+                    console.error("Interdit : Vous n'êtes pas autorisé à supprimer cet élément");
                 } else {
                     console.error("Échec de la suppression de l'image sur le serveur");
                 }
@@ -252,7 +251,7 @@ function closeModalAjouterPhoto(e) {
 }
 
 // Fonctionalité d'ajouter une photo
-const ajouterPhotoButton  = document.querySelector(".button-ajouter-photo")
+const ajouterPhotoButton = document.querySelector(".button-ajouter-photo")
 const fileInput = document.getElementById("photo")
 const form = document.getElementById("upload-photo-form")
 const validerButton = document.querySelector(".modal-valider")
@@ -322,23 +321,6 @@ form.addEventListener("submit", async function(event) {
         
     })
     }
-    
-    /*const imgElement = document.querySelector("#target-image img")
-
-    if (imgElement.src.length > 0) {
-        const imageError = document.getElementById("image-error")
-        const imageErrorCss = document.querySelector(".image-error")
-        imageError.style.display = "none"
-        imageErrorCss.style.display = "none"
-    }*/
-    
-    /*if(image) {
-        const imageError = document.getElementById("image-error")
-        const imageErrorCss = document.querySelector(".image-error")
-        imageError.style.display = "block"
-        imageErrorCss.style.display = "block"
-    }*/
-    
     if(!title && !categorie) {
         const titreError = document.getElementById("titre-error")
         titreError.style.display = "block"
@@ -349,9 +331,6 @@ form.addEventListener("submit", async function(event) {
         return
     }
 //
-console.log(title)
-console.log(categorie)
-console.log(image)
 
 const formData = new FormData()
 formData.append("title", title)
@@ -423,6 +402,10 @@ function displayImage(event) {
 reader.readAsDataURL(file)
 }
 
+
+
+//// Fonctionalités Supplémentaires ///
+
 //form & photo reset 
 document.querySelectorAll(".js-modal-close").forEach(e => {
     e.addEventListener("click", function() {
@@ -448,15 +431,6 @@ document.querySelector(".js-modal-return").addEventListener("click", function() 
         ajoutPhotoContainer.style.display = "flex"    
     })
 
-// Changement de couleur de valider bouton
-function checkInputsCompleted() {
-    const titreInput = document.getElementById("titre").value.trim()
-    const categorieInput = document.getElementById("categorie").value.trim()
-    const fileSelected = fileInput.files.length > 0
-
-    return titreInput !== "" && categorieInput !== "" && fileSelected
-}
-
 function updateValiderButtonState() {
     if (checkInputsCompleted()) {
         validerButton.classList.add("green-button")
@@ -465,10 +439,13 @@ function updateValiderButtonState() {
     }
 }
 
-function closeModal() {
-    modal.style.display = "none";
-    document.querySelector('.ajout-photo-container').style.display = "flex";
-    document.getElementById('target-image').style.display = "none"
+// Changement de couleur de valider bouton
+function checkInputsCompleted() {
+    const titreInput = document.getElementById("titre").value.trim()
+    const categorieInput = document.getElementById("categorie").value.trim()
+    const fileSelected = fileInput.files.length > 0
+
+    return titreInput !== "" && categorieInput !== "" && fileSelected
 }
 
 //Changement d'apparence de lien quand cliqué
@@ -493,3 +470,15 @@ navLinks.forEach(li => {
         
     })
 })
+
+//mode édition apparaître
+function getEditionDiv() {
+    const token = localStorage.getItem("token")
+    const editionDiv = document.querySelector(".mode-edition")
+    const header = document.querySelector("header")
+
+    if(token) {
+        editionDiv.style.display = "block"   
+        header.style.margin = "80px 0" 
+    }
+}
