@@ -398,6 +398,28 @@ i {
 	text-align: center;
 }
 
+.mode-edition {
+	background-color: black;
+    position: absolute;
+    top: 0px;
+	left: 0px;
+    width: 100%;
+}
+
+.edition-p {
+	color: white;
+	text-align: center;
+	padding: 15px 0;
+	display: flex;
+	justify-content: center;
+}
+
+ .modifier-icon {
+	color: white;
+	margin-right: 10px;
+    margin-top: 5px;
+}
+
 .login {
 	display: flex;
 	flex-direction: column;
